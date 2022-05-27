@@ -8,7 +8,6 @@ func BenchmarkBasicSuperFuncImpl(b *testing.B) {
 	basis.SuperFuncBenchmark(basis.BasicSuperFuncImpl, b)
 }
 
-//
 func TestMySuperFuncImpl(t *testing.T) {
 	basis.SuperFuncTestCase(MySuperFuncImpl, t)
 }
