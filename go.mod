@@ -1,4 +1,4 @@
-module titov_my_solution
+module https://github.com/titovPE/task_func_optimize_template
 
 go 1.18
 
