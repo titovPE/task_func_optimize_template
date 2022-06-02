@@ -3,18 +3,14 @@ package titov_solution
 import (
 	//"fmt"
 	//"math"	
-	"math/big"
+	//"math/big"
 )
 
-//бигинты не выгорели. Надо переделывать на прямую работу с байтами. Возможно сделать 3 уровня кеша для ускорения работу с малыми степенями. Но это не точно
-type d struct{ p1,p0 big.Int }
-
-var bigTwo = big.NewInt(2)
-var bigZero = big.NewInt(0)
+type d struct{ p1,p0 int64 }
 
 func MySuperFuncImpl(x1 float64, x2 float64, n uint8) float64 {
 	var p = cf(0,1,n)
-	return pw(x1,&p.p1) * bpw(x2,&p.p0)
+	return pw(x1,p.p1) * pw(x2,p.p0)
 }
 
 func cf(s0 int64, s1 int64,goal uint8) d {
@@ -25,24 +21,15 @@ func cf(s0 int64, s1 int64,goal uint8) d {
 		s1 = s1 + s0
 		s0 = buf
 	}
-	return d{p1: *big.NewInt(s1), p0: *big.NewInt(s0)}
+	return d{p1: s1, p0: s0}
 }
 
-func pw(x float64, y *big.Int) float64 {
-	var tmp = y.Int64()
+func pw(x float64, y int64) float64 {
 	var result float64 = 1
-	for ; tmp > 0; tmp = tmp >> 1 {
-		//предположительно можно избавиться от проверки условия через побитовые операции над x
-		if tmp&1 == 1 { result = result * x }
-		x = x * x
-	}
-	return result
-}
-
-func bpw(x float64, y *big.Int) float64 {
-	var result float64 = 1
-	for ; y.Cmp(bigZero) > 0; y.Div(y, bigTwo) {
-		if y.Bit(0) == 1 { result = result * x }
+	for ; y > 0; y = y >> 1 {
+		if y & 1 == 1 { result = result * x }
+		//var factor = float64(1&^(1&^(y & 1)))
+		//result = result*(1*factor+x*factor)
 		x = x * x
 	}
 	return result
